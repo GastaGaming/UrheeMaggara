@@ -1,0 +1,3 @@
+Materials/Material.001.xml
+Materials/DefaultMaterial.xml
+Materials/DefaultMaterial.xml

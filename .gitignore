@@ -16,6 +16,7 @@ build/
 /captures/
 .cxx/
 /UrheeMaggara.dir/
+/MyExecutableName.dir/
 /Win32/
 /x64/
 /x86/

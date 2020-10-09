@@ -28,7 +28,6 @@
 #include <Urho3D/Graphics/StaticModel.h>
 #include <Urho3D/Graphics/Material.h>
 #include <Urho3D/Graphics/Skybox.h>
-
 // Alternatively, you can replace all above Urho3D include statements by the single following one:
 // #include <Urho3D/Urho3DAll.h>
 
@@ -47,6 +46,7 @@ public:
     SharedPtr<Text> text_;
     SharedPtr<Scene> scene_;
     SharedPtr<Node> boxNode_;
+    SharedPtr<Node> makakara_;
     SharedPtr<Node> cameraNode_;
 
     /**
@@ -148,6 +148,16 @@ public:
         boxObject->SetMaterial(cache->GetResource<Material>("Materials/Stone.xml"));
         boxObject->SetCastShadows(true);
 
+        //Lets put a makkara in the scene
+        makakara_ = scene_->CreateChild("Makkara");
+        makakara_->SetPosition(Vector3(2, 2, 15));
+        makakara_->SetScale(Vector3(0.1, 0.1, 0.1));
+        makakara_->SetRotation(Quaternion(0, 90, 0));
+        StaticModel* makakaraObject = makakara_->CreateComponent<StaticModel>();
+        makakaraObject->SetModel(cache->GetResource<Model>("Models/MakkaraE/Makkara1.mdl"));
+        makakaraObject->SetMaterial(cache->GetResource<Material>("Materials/Stone.xml"));
+        makakaraObject->SetCastShadows(true);
+
         // Create 400 boxes in a grid.
         for(int x=-30;x<30;x+=3)
             for(int z=0;z<60;z+=3)
@@ -179,27 +189,27 @@ public:
             light->SetCastShadows(true);
         }
         // Create a blue point light
-        {
-            Node* lightNode=scene_->CreateChild("Light");
-            lightNode->SetPosition(Vector3(-10,2,5));
-            Light* light=lightNode->CreateComponent<Light>();
-            light->SetLightType(LIGHT_POINT);
-            light->SetRange(25);
-            light->SetBrightness(1.7);
-            light->SetColor(Color(0.5,.5,1.0,1));
-            light->SetCastShadows(true);
-        }
+        //{
+        //    Node* lightNode=scene_->CreateChild("Light");
+        //    lightNode->SetPosition(Vector3(-10,2,5));
+        //    Light* light=lightNode->CreateComponent<Light>();
+        //    light->SetLightType(LIGHT_POINT);
+        //    light->SetRange(25);
+        //    light->SetBrightness(1.7);
+        //    light->SetColor(Color(0.5,.5,1.0,1));
+        //    light->SetCastShadows(true);
+        //}
         // add a green spot light to the camera node
-        {
-            Node* node_light=cameraNode_->CreateChild();
-            Light* light=node_light->CreateComponent<Light>();
-            node_light->Pitch(15);  // point slightly downwards
-            light->SetLightType(LIGHT_SPOT);
-            light->SetRange(20);
-            light->SetColor(Color(.6,1,.6,1.0));
-            light->SetBrightness(2.8);
-            light->SetFov(25);
-        }
+        //{
+        //    Node* node_light=cameraNode_->CreateChild();
+        //    Light* light=node_light->CreateComponent<Light>();
+        //    node_light->Pitch(15);  // point slightly downwards
+        //    light->SetLightType(LIGHT_SPOT);
+        //    light->SetRange(20);
+        //    light->SetColor(Color(.6,1,.6,1.0));
+        //    light->SetBrightness(2.8);
+        //    light->SetFov(25);
+        //}
 
         // Now we setup the viewport. Of course, you can have more than one!
         Renderer* renderer=GetSubsystem<Renderer>();
