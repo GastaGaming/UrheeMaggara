@@ -133,15 +133,15 @@ public:
 
         //Lets put a makkara in the scene
         makakara_ = scene_->CreateChild("Makkara");
-        makakara_->SetPosition(Vector3(2, 2, 15));
-        makakara_->SetScale(Vector3(0.01, 0.01, 0.01));
-        makakara_->SetRotation(Quaternion(0, 0, 0));
+        makakara_->SetPosition(Vector3(5, 5, 15));
+        makakara_->SetScale(Vector3(1, 1, 1));
+        makakara_->SetRotation(Quaternion(0, 180, 0));
         AnimatedModel* makakaraObject = makakara_->CreateComponent<AnimatedModel>();
-        makakaraObject->SetModel(cache->GetResource<Model>("Models/RunningE/Makkara.mdl"));
+        makakaraObject->SetModel(cache->GetResource<Model>("Models/BE/Makkara2.mdl"));
         makakaraObject->SetMaterial(0,cache->GetResource<Material>("Models/RunningE/Materials/Eye.xml"));
         makakaraObject->SetMaterial(1, cache->GetResource<Material>("Models/RunningE/Materials/Body.xml"));
         makakaraObject->SetCastShadows(true);
-        Animation* walkAnimation = cache->GetResource<Animation>("Models/RunningE/DancingTwerk.ani");
+        Animation* walkAnimation = cache->GetResource<Animation>("Models/BE/Makkara2_MakkaraRigIdle.ani");
         AnimationState* state = makakaraObject->AddAnimationState(walkAnimation);
         // The state would fail to create (return null) if the animation was not found
         if (state)
@@ -317,7 +317,7 @@ public:
         if (animModel2->GetNumAnimationStates())
         {
             AnimationState* state2 = animModel2->GetAnimationStates()[0];
-            state2->AddTime(timeStep* 94);
+            state2->AddTime(timeStep* 1);
         }
 
 
