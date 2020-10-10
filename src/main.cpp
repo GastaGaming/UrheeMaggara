@@ -24,6 +24,7 @@ public:
 	SharedPtr<Node> cameraNode_;
 	SharedPtr<Node> plane_;
 	RigidBody* makakaraRb_;
+	SharedPtr<Node> jill_;
 
 	Vector3 magicalCameraOffset_ = Vector3(0, 2.5, -5);
 
@@ -136,22 +137,59 @@ public:
 
 		//Lets put a makkara in the scene
 		makakara_ = scene_->CreateChild("Makkara");
-		makakara_->SetPosition(Vector3(2, 2, 15));
-		makakara_->SetScale(Vector3(0.001, 0.001, 0.001));
+		makakara_->SetPosition(Vector3(2, 50, 15));
+		makakara_->SetScale(Vector3(1, 1, 1));
 		makakara_->SetRotation(Quaternion(0, 90, 0));
-		StaticModel* makakaraObject = makakara_->CreateComponent<StaticModel>();
-		makakaraObject->SetModel(cache->GetResource<Model>("Models/MakkaraE/Makkara1.mdl"));
-		makakaraObject->SetMaterial(cache->GetResource<Material>("Materials/Stone.xml"));
+		AnimatedModel* makakaraObject = makakara_->CreateComponent<AnimatedModel>();
+		makakaraObject->SetModel(cache->GetResource<Model>("Models/BE/Makkara2.mdl"));
+		makakaraObject->SetMaterial(0, cache->GetResource<Material>("Models/RunningE/Materials/Eye.xml"));
+		makakaraObject->SetMaterial(1, cache->GetResource<Material>("Models/RunningE/Materials/Body.xml"));
 		makakaraObject->SetCastShadows(true);
+		Animation* walkAnimation = cache->GetResource<Animation>("Models/BE/Makkara2_MakkaraRigIdle.ani");
+		AnimationState* state = makakaraObject->AddAnimationState(walkAnimation);
+
 		CollisionShape* makakaraColl = makakara_->CreateComponent<CollisionShape>();
 		makakaraColl->SetShapeType(ShapeType::SHAPE_SPHERE);
-		makakaraColl->SetSize(Vector3(1150, 1, 1));
+		makakaraColl->SetSize(Vector3(3, 1, 1));
+		makakaraColl->SetPosition(Vector3(0, 2, 0));
 		makakaraRb_ = makakara_->CreateComponent<RigidBody>();
 		makakaraRb_->SetFriction(1.0f);
 		makakaraRb_->SetRollingFriction(0.014f);
 		makakaraRb_->SetMass(100);
 		makakaraRb_->SetAngularDamping(0.30f);
 		makakaraRb_->SetLinearDamping(0.30f);
+
+		// The state would fail to create (return null) if the animation was not found
+		if (state)
+		{
+			// Enable full blending weight and looping
+			state->SetWeight(100);
+			state->SetLooped(true);
+			AnimationBlendMode x = ABM_LERP;
+			state->SetBlendMode(x);
+			state->SetTime(Random(walkAnimation->GetLength()));
+		}
+
+
+		jill_ = scene_->CreateChild("Jill");
+		jill_->SetPosition(Vector3(Random(40.0f) - 20.0f, 0.0f, Random(40.0f) - 20.0f));
+		jill_->SetRotation(Quaternion(0.0f, Random(360.0f), 0.0f));
+
+		AnimatedModel* modelObject = jill_->CreateComponent<AnimatedModel>();
+		modelObject->SetModel(cache->GetResource<Model>("Models/Kachujin/Kachujin.mdl"));
+		modelObject->SetMaterial(cache->GetResource<Material>("Models/Kachujin/Materials/Kachujin.xml"));
+		modelObject->SetCastShadows(true);
+		Animation* walkAnimation2 = cache->GetResource<Animation>("Models/Kachujin/Kachujin_Walk.ani");
+
+		AnimationState* state2 = modelObject->AddAnimationState(walkAnimation2);
+		// The state would fail to create (return null) if the animation was not found
+		if (state2)
+		{
+			// Enable full blending weight and looping
+			state2->SetWeight(1);
+			state2->SetLooped(true);
+			state2->SetTime(Random(walkAnimation2->GetLength()));
+		}
 
 		// Let's put a plane there for the makkara
 		plane_ = scene_->CreateChild("Plane");
@@ -299,6 +337,20 @@ public:
 		// Mouse sensitivity as degrees per pixel
 		const float MOUSE_SENSITIVITY = 0.1f;
 		//exampleCubeC_->Update(timeStep);
+		exampleCubeC_->Update(timeStep);
+		AnimatedModel* animModel = jill_->GetComponent<AnimatedModel>(true);
+		if (animModel->GetNumAnimationStates())
+		{
+			AnimationState* state = animModel->GetAnimationStates()[0];
+			state->AddTime(timeStep * 500);
+		}
+		AnimatedModel* animModel2 = makakara_->GetComponent<AnimatedModel>(true);
+		if (animModel2->GetNumAnimationStates())
+		{
+			AnimationState* state2 = animModel2->GetAnimationStates()[0];
+			state2->AddTime(timeStep * 1);
+		}
+
 
 		if (time_ >= 1)
 		{
@@ -441,7 +493,7 @@ public:
 		// Create the ExampleCube logic component
 		exampleCubeC_ = exampleCube_->CreateComponent<ExampleCube>();
 		// Create the rendering and physics components
-		exampleCubeC_->Init();
+		exampleCubeC_->Init(scene_);
 	}
 };
 
