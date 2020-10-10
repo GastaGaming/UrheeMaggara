@@ -1,35 +1,9 @@
 #include <string>
 #include <sstream>
-
-#include <Urho3D/Core/CoreEvents.h>
-#include <Urho3D/Engine/Application.h>
-#include <Urho3D/Engine/Engine.h>
-#include <Urho3D/Engine/EngineDefs.h>
-#include <Urho3D/Input/Input.h>
-#include <Urho3D/Input/InputEvents.h>
-#include <Urho3D/Resource/ResourceCache.h>
-#include <Urho3D/Resource/XMLFile.h>
-#include <Urho3D/IO/Log.h>
-#include <Urho3D/UI/UI.h>
-#include <Urho3D/UI/Text.h>
-#include <Urho3D/UI/Font.h>
-#include <Urho3D/UI/Button.h>
-#include <Urho3D/UI/UIEvents.h>
-#include <Urho3D/Scene/Scene.h>
-#include <Urho3D/Scene/SceneEvents.h>
-#include <Urho3D/Graphics/Graphics.h>
-#include <Urho3D/Graphics/Camera.h>
-#include <Urho3D/Graphics/Geometry.h>
-#include <Urho3D/Graphics/Renderer.h>
-#include <Urho3D/Graphics/DebugRenderer.h>
-#include <Urho3D/Graphics/Octree.h>
-#include <Urho3D/Graphics/Light.h>
-#include <Urho3D/Graphics/Model.h>
-#include <Urho3D/Graphics/StaticModel.h>
-#include <Urho3D/Graphics/Material.h>
-#include <Urho3D/Graphics/Skybox.h>
-// Alternatively, you can replace all above Urho3D include statements by the single following one:
-// #include <Urho3D/Urho3DAll.h>
+//Just lazy fucker include whole urho
+#include <Urho3D/Urho3DAll.h>
+//Own includes
+#include "ExampleCube.h"
 
 using namespace Urho3D;
 /**
@@ -49,6 +23,10 @@ public:
     SharedPtr<Node> makakara_;
     SharedPtr<Node> cameraNode_;
 
+    //
+    SharedPtr<Node> exampleCube_;
+    SharedPtr<ExampleCube> exampleCubeC_;
+    ResourceCache* cache = GetSubsystem<ResourceCache>();
     /**
     * This happens before the engine has been initialized
     * so it's usually minimal code setting defaults for
@@ -57,6 +35,8 @@ public:
     */
     MyApp(Context * context) : Application(context),framecount_(0),time_(0)
     {
+        //Register factory and attributes for the ExampleCube component so it can be created via CreateComponent, and loaded / saved
+        ExampleCube::RegisterObject(context);
     }
 
     /**
@@ -80,8 +60,9 @@ public:
         // Configuration not depending whether we compile for debug or release.
         engineParameters_[EP_WINDOW_WIDTH]=1280;
         engineParameters_[EP_WINDOW_HEIGHT]=720;
-
-        // All 'EP_' constants are defined in ${URHO3D_INSTALL}/include/Urho3D/Engine/EngineDefs.h file
+        GetSubsystem<Engine>()->SetMaxFps(999999);
+        // All 'EP_' constants are defined in ${URHO3D_INSTALL}/include/Urho3D/Engine/EngineDefs.h file#
+        context_->RegisterFactory<ExampleCube>();
     }
 
     /**
@@ -158,6 +139,8 @@ public:
         makakaraObject->SetMaterial(cache->GetResource<Material>("Materials/Stone.xml"));
         makakaraObject->SetCastShadows(true);
 
+        //Lets run our custom script
+        CreateExampleCube();
         // Create 400 boxes in a grid.
         for(int x=-30;x<30;x+=3)
             for(int z=0;z<60;z+=3)
@@ -288,6 +271,9 @@ public:
         float MOVE_SPEED=10.0f;
         // Mouse sensitivity as degrees per pixel
         const float MOUSE_SENSITIVITY=0.1f;
+        //exampleCubeC_->Update(timeStep);
+
+
 
         if(time_ >=1)
         {
@@ -393,6 +379,15 @@ public:
     {
         // We really don't have anything useful to do here for this example.
         // Probably shouldn't be subscribing to events we don't care about.
+    }
+
+    void CreateExampleCube()
+    {
+        exampleCube_ = scene_->CreateChild("ExampleCube");
+        // Create the ExampleCube logic component
+        exampleCubeC_ = exampleCube_->CreateComponent<ExampleCube>();
+        // Create the rendering and physics components
+        exampleCubeC_->Init();
     }
 };
 

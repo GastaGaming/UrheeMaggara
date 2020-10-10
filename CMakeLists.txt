@@ -21,9 +21,9 @@ include (UrhoCommon)
 # Define target name
 set (TARGET_NAME UrheeMaggara)
 # Define source files
-define_source_files ()
-file (GLOB CPP_FILES *.cpp)
-file (GLOB H_FILES *.h)
+#define_source_files ()
+file (GLOB CPP_FILES src/*.cpp)
+file (GLOB H_FILES src/*.h)
 set (SOURCE_FILES ${CPP_FILES} ${H_FILES})
 # Setup target with resource copying
 setup_main_executable ()
