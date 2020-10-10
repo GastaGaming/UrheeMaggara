@@ -17,18 +17,23 @@ void ExampleCube::ApplyAttributes()
 //Handle physics update
 void ExampleCube::Update(float timeStep)
 {
-	startFloat += startFloat + 5;
-	exampleCube_->SetRotation(Quaternion(0, startFloat, 0));
+	std::string str = "ExampleCube ";
+	str.append(std::to_string(timeStep));
+	String s(str.c_str(), str.size());
+	URHO3D_LOGINFO(s);
+	//exampleCube_
 }
-void ExampleCube::Init()
+void ExampleCube::Init(Scene* scene)
 {
 	// This function is called only from the main program when initially creating the vehicle, not on scene load
 	auto* cache = GetSubsystem<ResourceCache>();
+	Scene* scene_ = scene;
+	exampleCube_ = scene_->CreateChild("ExampelCube");
 
-	auto* hullObject = node_->CreateComponent<StaticModel>();
-	auto* hullShape = node_->CreateComponent<CollisionShape>();
+	auto* hullObject = exampleCube_->CreateComponent<StaticModel>();
+	auto* hullShape = exampleCube_->CreateComponent<CollisionShape>();
 
-	node_->SetScale(Vector3(3, 3, 3));
+	exampleCube_->SetScale(Vector3(3, 3, 3));
 	hullObject->SetModel(cache->GetResource<Model>("Models/Box.mdl"));
 	hullObject->SetMaterial(cache->GetResource<Material>("Materials/Mushroom.xml"));
 	hullObject->SetCastShadows(true);

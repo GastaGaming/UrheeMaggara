@@ -21,6 +21,8 @@ public:
     SharedPtr<Scene> scene_;
     SharedPtr<Node> boxNode_;
     SharedPtr<Node> makakara_;
+    SharedPtr<Node> jill_;
+
     SharedPtr<Node> cameraNode_;
 
     //
@@ -132,13 +134,46 @@ public:
         //Lets put a makkara in the scene
         makakara_ = scene_->CreateChild("Makkara");
         makakara_->SetPosition(Vector3(2, 2, 15));
-        makakara_->SetScale(Vector3(0.1, 0.1, 0.1));
-        makakara_->SetRotation(Quaternion(0, 90, 0));
-        StaticModel* makakaraObject = makakara_->CreateComponent<StaticModel>();
-        makakaraObject->SetModel(cache->GetResource<Model>("Models/MakkaraE/Makkara1.mdl"));
-        makakaraObject->SetMaterial(cache->GetResource<Material>("Materials/Stone.xml"));
+        makakara_->SetScale(Vector3(0.01, 0.01, 0.01));
+        makakara_->SetRotation(Quaternion(0, 0, 0));
+        AnimatedModel* makakaraObject = makakara_->CreateComponent<AnimatedModel>();
+        makakaraObject->SetModel(cache->GetResource<Model>("Models/RunningE/Makkara.mdl"));
+        makakaraObject->SetMaterial(0,cache->GetResource<Material>("Models/RunningE/Materials/Eye.xml"));
+        makakaraObject->SetMaterial(1, cache->GetResource<Material>("Models/RunningE/Materials/Body.xml"));
         makakaraObject->SetCastShadows(true);
+        Animation* walkAnimation = cache->GetResource<Animation>("Models/RunningE/DancingTwerk.ani");
+        AnimationState* state = makakaraObject->AddAnimationState(walkAnimation);
+        // The state would fail to create (return null) if the animation was not found
+        if (state)
+        {
+            // Enable full blending weight and looping
+            state->SetWeight(100);
+            state->SetLooped(true);
+            AnimationBlendMode x = ABM_LERP;
+            state->SetBlendMode(x);
+            state->SetTime(Random(walkAnimation->GetLength()));
+        }
 
+
+        jill_ = scene_->CreateChild("Jill");
+        jill_->SetPosition(Vector3(Random(40.0f) - 20.0f, 0.0f, Random(40.0f) - 20.0f));
+        jill_->SetRotation(Quaternion(0.0f, Random(360.0f), 0.0f));
+
+        AnimatedModel* modelObject = jill_->CreateComponent<AnimatedModel>();
+        modelObject->SetModel(cache->GetResource<Model>("Models/Kachujin/Kachujin.mdl"));
+        modelObject->SetMaterial(cache->GetResource<Material>("Models/Kachujin/Materials/Kachujin.xml"));
+        modelObject->SetCastShadows(true);
+        Animation* walkAnimation2 = cache->GetResource<Animation>("Models/Kachujin/Kachujin_Walk.ani");
+
+        AnimationState* state2 = modelObject->AddAnimationState(walkAnimation2);
+        // The state would fail to create (return null) if the animation was not found
+        if (state2)
+        {
+            // Enable full blending weight and looping
+            state2->SetWeight(1);
+            state2->SetLooped(true);
+            state2->SetTime(Random(walkAnimation2->GetLength()));
+        }
         //Lets run our custom script
         CreateExampleCube();
         // Create 400 boxes in a grid.
@@ -271,8 +306,19 @@ public:
         float MOVE_SPEED=10.0f;
         // Mouse sensitivity as degrees per pixel
         const float MOUSE_SENSITIVITY=0.1f;
-        //exampleCubeC_->Update(timeStep);
-
+        exampleCubeC_->Update(timeStep);
+        AnimatedModel* animModel = jill_->GetComponent<AnimatedModel>(true);
+        if (animModel->GetNumAnimationStates())
+        {
+            AnimationState* state = animModel->GetAnimationStates()[0];
+            state->AddTime(timeStep * 500);
+        }
+        AnimatedModel* animModel2 = makakara_->GetComponent<AnimatedModel>(true);
+        if (animModel2->GetNumAnimationStates())
+        {
+            AnimationState* state2 = animModel2->GetAnimationStates()[0];
+            state2->AddTime(timeStep* 94);
+        }
 
 
         if(time_ >=1)
@@ -386,8 +432,9 @@ public:
         exampleCube_ = scene_->CreateChild("ExampleCube");
         // Create the ExampleCube logic component
         exampleCubeC_ = exampleCube_->CreateComponent<ExampleCube>();
+        exampleCubeC_->exampleCube_ = exampleCube_;
         // Create the rendering and physics components
-        exampleCubeC_->Init();
+        exampleCubeC_->Init(scene_);
     }
 };
 

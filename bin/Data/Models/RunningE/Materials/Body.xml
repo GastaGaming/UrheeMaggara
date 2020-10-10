@@ -1,0 +1,6 @@
+<material>
+    <technique name="Techniques/Diff.xml" quality="1" />
+    <texture unit="diffuse" name="Models/RunningE/Textures/Makkara_lowpoly_Makkara_BaseColor.png" />
+    <shader psdefines="PACKEDNORMAL" />
+    <parameter name="MatSpecColor" value="0.3 0.3 0.3 16" />
+</material>
