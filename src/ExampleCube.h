@@ -19,5 +19,5 @@ public:
 	//void FixedUpdate(float timeStep) override;
 	void Update(float timeStep) override;
 	/// Initialize the vehicle. Create rendering and physics components. Called by the application.
-	void Init();
+	virtual void Init(Scene* scene);
 };
