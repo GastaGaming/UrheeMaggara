@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<scene id="1">
+	<attribute name="Name" value="" />
+	<attribute name="Time Scale" value="1" />
+	<attribute name="Smoothing Constant" value="50" />
+	<attribute name="Snap Threshold" value="5" />
+	<attribute name="Elapsed Time" value="0" />
+	<attribute name="Next Replicated Node ID" value="6" />
+	<attribute name="Next Replicated Component ID" value="6" />
+	<attribute name="Next Local Node ID" value="16777221" />
+	<attribute name="Next Local Component ID" value="16777244" />
+	<attribute name="Variables" />
+	<attribute name="Variable Names" value="" />
+	<component type="Octree" id="1" />
+	<component type="DebugRenderer" id="2" />
+	<component type="PhysicsWorld" id="5" />
+	<node id="16777218">
+		<attribute name="Is Enabled" value="true" />
+		<attribute name="Name" value="Makkara" />
+		<attribute name="Tags" />
+		<attribute name="Position" value="0 0 0" />
+		<attribute name="Rotation" value="1 0 0 0" />
+		<attribute name="Scale" value="1 1 1" />
+		<attribute name="Variables" />
+		<component type="RigidBody" id="16777229" />
+		<component type="CollisionShape" id="16777230">
+			<attribute name="Shape Type" value="Capsule" />
+			<attribute name="Size" value="0.5 1.8 0" />
+			<attribute name="Offset Position" value="0 0.9 0" />
+		</component>
+		<node id="16777219">
+			<attribute name="Is Enabled" value="true" />
+			<attribute name="Name" value="" />
+			<attribute name="Tags" />
+			<attribute name="Position" value="0 0.766665 0" />
+			<attribute name="Rotation" value="1 0 0 0" />
+			<attribute name="Scale" value="1 1 1" />
+			<attribute name="Variables" />
+			<component type="AnimatedModel" id="16777231">
+				<attribute name="Model" value="Model;Models/TeaPot.mdl" />
+				<attribute name="Material" value="Material;Models/MakkaraE/Materials/Material.001.xml;Models/MakkaraE/Materials/DefaultMaterial.xml" />
+				<attribute name="Cast Shadows" value="true" />
+				<attribute name="Animation States">
+					<variant type="Int" value="0" />
+				</attribute>
+			</component>
+		</node>
+	</node>
+</scene>
