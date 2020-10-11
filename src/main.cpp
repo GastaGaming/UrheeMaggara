@@ -66,6 +66,7 @@ public:
 // Configuration not depending whether we compile for debug or release.
 		engineParameters_[EP_WINDOW_WIDTH] = 1280;
 		engineParameters_[EP_WINDOW_HEIGHT] = 720;
+		engineParameters_[EP_SOUND] = true;
 		GetSubsystem<Engine>()->SetMaxFps(999999);
 		// All 'EP_' constants are defined in ${URHO3D_INSTALL}/include/Urho3D/Engine/EngineDefs.h file#
 		context_->RegisterFactory<ExampleCube>();
