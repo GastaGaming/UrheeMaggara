@@ -44,6 +44,7 @@ public:
 	{
 		//Register factory and attributes for the ExampleCube component so it can be created via CreateComponent, and loaded / saved
 		ExampleCube::RegisterObject(context);
+		//Makkara::RegisterObject(context);
 		SceneFugLoader::RegisterObject(context);
 	}
 
@@ -68,6 +69,7 @@ public:
 // Configuration not depending whether we compile for debug or release.
 		engineParameters_[EP_WINDOW_WIDTH] = 1920;
 		engineParameters_[EP_WINDOW_HEIGHT] = 1080;
+		engineParameters_[EP_SOUND] = true;
 		GetSubsystem<Engine>()->SetMaxFps(999999);
 		// All 'EP_' constants are defined in ${URHO3D_INSTALL}/include/Urho3D/Engine/EngineDefs.h file#
 		context_->RegisterFactory<ExampleCube>();
@@ -118,11 +120,10 @@ public:
 		//scene_->CreateComponent<Octree>();
 		// Let's add an additional scene component for fun.
 		scene_->CreateComponent<DebugRenderer>();
-		scene_->LoadAsyncXML(cache->GetFile("Models/MapE/MegaMappiV.xml"));
-		sceneFugLoader_ = scene_->CreateComponent<SceneFugLoader>();
+		scene_->LoadAsyncXML(cache->GetFile("Models/MapE/MegaMappiF.xml"));
+		//sceneFugLoader_ = scene_->CreateComponent<SceneFugLoader>();
 		//std::string path = "Models/MapE/MegaMappiV.xml";
-		//Urho3D::String path = "Models/MapE/MegaMappiV.xml";
-		sceneFugLoader_->Init(scene_);
+		//sceneFugLoader_->Init(scene_, path, context_);
 		// Let's put some sky in there.
 		// Again, if the engine can't find these resources you need to check
 		// the "ResourcePrefixPath". These files come with Urho3D.
@@ -164,7 +165,7 @@ public:
 		//mapObject->SetCastShadows(true);
 		//Lets put a makkara in the scene
 		makakara_ = scene_->CreateChild("Makkara");
-		makakara_->SetPosition(Vector3(2, 50, 15));
+		makakara_->SetPosition(Vector3(20, 20, 15));
 		makakara_->SetScale(Vector3(1, 1, 1));
 		makakara_->SetRotation(Quaternion(0, 90, 0));
 		AnimatedModel* makakaraObject = makakara_->CreateComponent<AnimatedModel>();
@@ -285,6 +286,17 @@ public:
 		//    light->SetBrightness(2.8);
 		//    light->SetFov(25);
 		//}
+
+		//Start music
+		Sound* music = cache->GetResource<Sound>("Music/Mikado.wav");
+		SoundSource* source = scene_->CreateComponent<SoundSource>();
+
+		if (music)
+		{
+			music->SetLooped(true);
+			source->SetGain(0.05);
+			source->Play(music);
+		}
 
 		// Now we setup the viewport. Of course, you can have more than one!
 		Renderer* renderer = GetSubsystem<Renderer>();
