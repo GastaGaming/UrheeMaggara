@@ -34,6 +34,7 @@ void Makkara::Init()
 void Makkara::SubscribeToEvents()
 {
     SubscribeToEvent(E_KEYDOWN, URHO3D_HANDLER(Makkara, HandleKeyDown));
+    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(Makkara, Update));
 }
 
 void Makkara::HandleKeyDown(StringHash eventType, VariantMap& eventData)

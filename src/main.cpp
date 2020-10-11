@@ -42,6 +42,7 @@ public:
 	{
 		//Register factory and attributes for the ExampleCube component so it can be created via CreateComponent, and loaded / saved
 		ExampleCube::RegisterObject(context);
+		Makkara::RegisterObject(context);
 	}
 
 	/**
