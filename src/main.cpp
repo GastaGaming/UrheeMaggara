@@ -4,7 +4,7 @@
 #include <Urho3D/Urho3DAll.h>
 //Own includes
 #include "ExampleCube.h"
-
+#include "SceneFugLoader.h"
 using namespace Urho3D;
 /**
 * Using the convenient Application API we don't have
@@ -21,6 +21,7 @@ public:
 	SharedPtr<Scene> scene_;
 	SharedPtr<Node> boxNode_;
 	SharedPtr<Node> makakara_;
+	SharedPtr<Node> map_;
 	SharedPtr<Node> cameraNode_;
 	SharedPtr<Node> plane_;
 	RigidBody* makakaraRb_;
@@ -31,6 +32,7 @@ public:
 	//
 	SharedPtr<Node> exampleCube_;
 	SharedPtr<ExampleCube> exampleCubeC_;
+	SharedPtr<SceneFugLoader> sceneFugLoader_;
 	ResourceCache* cache = GetSubsystem<ResourceCache>();
 	/**
 	* This happens before the engine has been initialized
@@ -42,6 +44,7 @@ public:
 	{
 		//Register factory and attributes for the ExampleCube component so it can be created via CreateComponent, and loaded / saved
 		ExampleCube::RegisterObject(context);
+		SceneFugLoader::RegisterObject(context);
 	}
 
 	/**
@@ -112,10 +115,13 @@ public:
 		// Let's setup a scene to render.
 		scene_ = new Scene(context_);
 		// Let the scene have an Octree component!
-		scene_->CreateComponent<Octree>();
+		//scene_->CreateComponent<Octree>();
 		// Let's add an additional scene component for fun.
 		scene_->CreateComponent<DebugRenderer>();
-
+		scene_->LoadAsyncXML(cache->GetFile("Models/MapE/MegaMappiV.xml"));
+		//sceneFugLoader_ = scene_->CreateComponent<SceneFugLoader>();
+		//std::string path = "Models/MapE/MegaMappiV.xml";
+		//sceneFugLoader_->Init(scene_, path, context_);
 		// Let's put some sky in there.
 		// Again, if the engine can't find these resources you need to check
 		// the "ResourcePrefixPath". These files come with Urho3D.
@@ -134,6 +140,27 @@ public:
 		boxObject->SetMaterial(cache->GetResource<Material>("Materials/Stone.xml"));
 		boxObject->SetCastShadows(true);
 
+		//// Let create nice map
+		//scene_->LoadXML("Models/MapE/MegaMappi.xml");
+		//scene_->LoadAsyncXML(cache->GetFile("Models/MapE/MegaMappi.xml"));
+
+		//map_ = scene_->CreateChild("Map");
+		//map_->SetPosition(Vector3(0, 0, 0));
+		//map_->SetScale(Vector3(1, 1, 1));
+		//StaticModel* mapObject = map_->CreateComponent<StaticModel>();
+		//mapObject->SetModel(cache->GetResource<Model>("Models/MapE/MegaMappi.mdl"));
+		//mapObject->SetMaterial(0,cache->GetResource<Material>("Models/MapE/Materials/Asphalt.xml"));
+		//mapObject->SetMaterial(1, cache->GetResource<Material>("Models/MapE/Materials/Black.xml"));
+		//mapObject->SetMaterial(2, cache->GetResource<Material>("Models/MapE/Materials/DefaultMaterial.xml"));
+		//mapObject->SetMaterial(3, cache->GetResource<Material>("Models/MapE/Materials/Material.001.xml"));
+		//mapObject->SetMaterial(4, cache->GetResource<Material>("Models/MapE/Materials/White.001.xml"));
+		//CollisionShape* mapColl= map_->CreateComponent<CollisionShape>();
+		//mapColl->SetShapeType(ShapeType::SHAPE_CONVEXHULL);
+		//mapColl->SetSize(Vector3(1, 1, 1));
+		//mapColl->SetPosition(Vector3(0, 2, 0));
+		//RigidBody* mapRb = map_->CreateComponent<RigidBody>();
+		//mapRb->SetUseGravity(false);
+		//mapObject->SetCastShadows(true);
 		//Lets put a makkara in the scene
 		makakara_ = scene_->CreateChild("Makkara");
 		makakara_->SetPosition(Vector3(2, 50, 15));
