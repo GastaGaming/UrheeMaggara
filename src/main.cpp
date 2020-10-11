@@ -66,8 +66,8 @@ public:
 #endif
 
 // Configuration not depending whether we compile for debug or release.
-		engineParameters_[EP_WINDOW_WIDTH] = 1280;
-		engineParameters_[EP_WINDOW_HEIGHT] = 720;
+		engineParameters_[EP_WINDOW_WIDTH] = 1920;
+		engineParameters_[EP_WINDOW_HEIGHT] = 1080;
 		GetSubsystem<Engine>()->SetMaxFps(999999);
 		// All 'EP_' constants are defined in ${URHO3D_INSTALL}/include/Urho3D/Engine/EngineDefs.h file#
 		context_->RegisterFactory<ExampleCube>();
@@ -119,9 +119,10 @@ public:
 		// Let's add an additional scene component for fun.
 		scene_->CreateComponent<DebugRenderer>();
 		scene_->LoadAsyncXML(cache->GetFile("Models/MapE/MegaMappiV.xml"));
-		//sceneFugLoader_ = scene_->CreateComponent<SceneFugLoader>();
+		sceneFugLoader_ = scene_->CreateComponent<SceneFugLoader>();
 		//std::string path = "Models/MapE/MegaMappiV.xml";
-		//sceneFugLoader_->Init(scene_, path, context_);
+		//Urho3D::String path = "Models/MapE/MegaMappiV.xml";
+		sceneFugLoader_->Init(scene_);
 		// Let's put some sky in there.
 		// Again, if the engine can't find these resources you need to check
 		// the "ResourcePrefixPath". These files come with Urho3D.

@@ -17,10 +17,10 @@ void ExampleCube::ApplyAttributes()
 //Handle physics update
 void ExampleCube::Update(float timeStep)
 {
-	std::string str = "ExampleCube ";
+	/*std::string str = "ExampleCube ";
 	str.append(std::to_string(timeStep));
 	String s(str.c_str(), str.size());
-	URHO3D_LOGINFO(s);
+	URHO3D_LOGINFO(s);*/
 	//exampleCube_
 }
 void ExampleCube::Init(Scene* scene)
