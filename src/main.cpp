@@ -259,6 +259,17 @@ public:
 		//    light->SetFov(25);
 		//}
 
+		//Start music
+		Sound* music = cache->GetResource<Sound>("Music/Mikado.wav");
+		SoundSource* source = scene_->CreateComponent<SoundSource>();
+
+		if (music)
+		{
+			music->SetLooped(true);
+			source->SetGain(0.05);
+			source->Play(music);
+		}
+
 		// Now we setup the viewport. Of course, you can have more than one!
 		Renderer* renderer = GetSubsystem<Renderer>();
 		SharedPtr<Viewport> viewport(new Viewport(context_, scene_, cameraNode_->GetComponent<Camera>()));
